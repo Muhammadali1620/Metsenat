@@ -1,0 +1,40 @@
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+{% for msg in messages %}
+    {{ msg }}
+{% endfor %}
+<button type="submit">Save</button>
+</form>
+
+
+<form method="get">
+    {% for field in filter.form %}
+        <label for="{{ field.id_for_label }}">{{ field.name }}</label>
+        <select name="{{ field.name }}" id="{{ field.id_for_label }}">
+            {% for value, label in field.field.choices %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+    {% endfor %}
+    <div class="col-12 form-group mg-t-8">
+        <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">SEARCH</button>
+    </div>
+</form>
+
+
+Students
+<ol>
+{% for obj in objects %}
+<a href="{% url 'delete_student' obj.pk %}"><button style="color: red;" >DELETE</button></a>
+<a href="{% url 'update_student' obj.pk %}"><button style="color: blue;" >UPDATE</button></a>
+<li>
+    <p><strong>full_name:</strong>{{ obj.full_name }}</p>
+    <p><strong>university:</strong>{{ obj.university }}</p>
+    <p><strong>level:</strong>{{ obj.get_level_display }}</p>
+    <p><strong>contract:</strong>{{ obj.contract }}</p>
+    <p><strong>sponsored_amount:</strong>{{ obj.sponsored_amount }}</p>
+    <p><strong>phone_number:</strong>{{ obj.phone_number }}</p>
+</li>
+{% endfor %}
+</ol>

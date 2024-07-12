@@ -1,0 +1,7 @@
+<h1 style="color: red;">Delete: {{object}}?</h1>
+
+<form action="" method="post">
+    {% csrf_token %}
+<button name="submit" type="submit">Submit</button>
+</form>
+<a href="{{ request.META.HTTP_REFERER }}"><button>Cancel</button></a>

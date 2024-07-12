@@ -1,0 +1,20 @@
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+{% for msg in messages %}
+    {{ msg }}
+{% endfor %}
+<button type="submit">Save</button>
+</form>
+Students
+<ol>
+{% for obj in objects %}
+<a href="{% url 'delete_sponsor_student' obj.pk %}"><button style="color: red;" >DELETE</button></a>
+<a href="{% url 'update_sponsor_student' obj.pk %}"><button style="color: blue;" >UPDATE</button></a>
+<li>
+    <p><strong>sponsor:</strong>{{ obj.sponsor }}</p>
+    <p><strong>student:</strong>{{ obj.student }}</p>
+    <p><strong>amount:</strong>{{ obj.amount }}</p>
+</li>
+{% endfor %}
+</ol>
