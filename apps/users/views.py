@@ -3,7 +3,7 @@ from django.views.generic import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 
 from apps.users.filters import StudentFilter
-from apps.users.forms import StudentRegisterForm, UniversityCreateForm
+from apps.users.forms import StudentRegisterForm, StudentUpdateForm, UniversityCreateForm
 from apps.users.models import Student, University
 
 
@@ -33,7 +33,7 @@ class StudentDeleteView(DeleteView):
 class StudentUpdateView(UpdateView):
     model = Student
     template_name = 'student_form.html'
-    form_class = StudentRegisterForm
+    form_class = StudentUpdateForm
     success_url = reverse_lazy('student_register')
 
 

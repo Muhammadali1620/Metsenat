@@ -21,7 +21,7 @@ class Student(models.Model):
     full_name = models.CharField(max_length=150)
     university = models.ForeignKey(University, models.CASCADE, related_name='students')
     level = models.PositiveSmallIntegerField(choices=Level.choices)
-    contract = models.DecimalField(max_digits=10, decimal_places=2)
+    contract = models.DecimalField(max_digits=10, decimal_places=2, )
     sponsored_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     phone_number = models.CharField(max_length=13, validators=[phone_validate], unique=True)
 

@@ -11,10 +11,16 @@ class ApplicationRegisterForm(forms.ModelForm):
 class ApplicationUpdaterForm(forms.ModelForm):
     class Meta:
         model = Sponsor
-        fields = ['full_name', 'phone_number', 'status', 'person', 'company_name', 'payment_type']
+        fields = ['full_name', 'phone_number', 'status', 'amount', 'person', 'company_name', 'payment_type']
 
 
 class SponsorStudentCreateForm(forms.ModelForm):
     class Meta:
         model = SponsorStudent
         fields = ['sponsor', 'student', 'amount']
+
+
+class SponsorStudentUpdateForm(forms.ModelForm):
+    class Meta:
+        model = SponsorStudent
+        fields = ['amount']

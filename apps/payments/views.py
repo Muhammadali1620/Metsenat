@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 
 from apps.payments.filters import SponsorFilter
-from apps.payments.forms import ApplicationRegisterForm, ApplicationUpdaterForm, SponsorStudentCreateForm
+from apps.payments.forms import ApplicationRegisterForm, ApplicationUpdaterForm, SponsorStudentCreateForm, SponsorStudentUpdateForm
 from apps.payments.models import Sponsor, SponsorStudent
 
 
@@ -69,7 +69,10 @@ class SponsorStudentDeleteView(DeleteView):
 class SponsorStudentUpdateView(UpdateView):
     model = SponsorStudent
     template_name = 'sponsor_student_form.html'
-    form_class = SponsorStudentCreateForm
+    form_class = SponsorStudentUpdateForm
     success_url = reverse_lazy('sponsor_student')
 
-    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sp_st'] = SponsorStudent.objects.get(id=self.kwargs['pk'])
+        return context

@@ -57,29 +57,46 @@ class SponsorStudent(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('sponsor', 'student')
+
     def clean(self):
         sponsor = self.sponsor
         student = self.student
 
-        if sponsor.status != Sponsor.Status.CONFIRMED:
-            raise ValidationError('Sponsor is not confirmed')
-        
-        sponsor_amount = sponsor.amount - sponsor.used_amount
-        if sponsor_amount == 0:
-            raise ValidationError('Sponsor amount is used up')
-        
-        student_contract = student.contract - student.sponsored_amount
-        if student_contract == 0:
-            raise ValidationError('Student contract is full')
-        
-        if self.amount <= 0:
-            raise ValidationError('Amount cannot be negative')
-        
-        if self.amount > sponsor_amount:
-            raise ValidationError('Amount cannot be greater than sponsor amount')
+        old_obj = SponsorStudent.objects.filter(sponsor=sponsor, student=student).first()
 
-        if self.amount > student_contract:
-            raise ValidationError('Amount cannot be greater than student contract')
+        if not old_obj:
+            if sponsor.status != Sponsor.Status.CONFIRMED:
+                raise ValidationError('Sponsor is not confirmed')
+
+            sponsor_amount = sponsor.amount - sponsor.used_amount
+            student_contract = student.contract - student.sponsored_amount
+
+            if self.amount <= 0:
+                raise ValidationError('Amount cannot be negative')
+
+            if self.amount > sponsor_amount:
+                raise ValidationError('Amount cannot be greater than sponsor amount')
+            
+            if self.amount > student_contract:
+                raise ValidationError('Amount cannot be greater than student contract')
+            
+        else:
+            minus = student.sponsored_amount - old_obj.amount
+            student_amount = minus + self.amount
+        
+            if student_amount > student.contract:
+                raise ValidationError('Amount cannot be greater than student contract')
+            
+            sponsor_old_amount = sponsor.amount - sponsor.used_amount - old_obj.amount
+            sponsor_new_amount = sponsor_old_amount  + self.amount
+            
+            if sponsor_new_amount < 0:
+                raise ValidationError('Amount cannot be greater than sponsor amount')            
+
+            
+
         
     def __str__(self):
         return f"{self.sponsor}:{self.student}:{self.amount}"
